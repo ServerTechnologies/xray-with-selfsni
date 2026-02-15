@@ -88,6 +88,13 @@ EOF
 mv /var/www/html/index.nginx-debian.html /var/www/html/index.html
 systemctl restart nginx
 ```
+
+Можете поставить главной страницей шаблон предложенный мною установка одной командой
+```
+sudo bash -c 'if command -v wget &> /dev/null; then echo "Используется: wget" && wget -O /var/www/html/index.html https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/var/www/html/index.html && echo "Файл успешно скачан в /var/www/html/index.html"; elif command -v curl &> /dev/null; then echo "Используется: curl" && curl -o /var/www/html/index.html https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/var/www/html/index.html && echo "Файл успешно скачан в /var/www/html/index.html"; else echo "Ошибка: ни wget, ни curl не установлены"; exit 1; fi'
+
+```
+
 Готово.
 
 
@@ -232,6 +239,11 @@ unzip <имя архива.zip>
 cp -r <имя папки>/* /var/www/html/index.html
 ```
 
+Можете поставить главной страницей шаблон предложенный мною установка одной командой
+```
+sudo bash -c 'if command -v wget &> /dev/null; then echo "Используется: wget" && wget -O /var/www/html/index.html https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/var/www/html/index.html && echo "Файл успешно скачан в /var/www/html/index.html"; elif command -v curl &> /dev/null; then echo "Используется: curl" && curl -o /var/www/html/index.html https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/var/www/html/index.html && echo "Файл успешно скачан в /var/www/html/index.html"; else echo "Ошибка: ни wget, ни curl не установлены"; exit 1; fi'
+
+```
 
 
 
