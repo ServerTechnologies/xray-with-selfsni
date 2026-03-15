@@ -45,6 +45,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.
 Порт 443\
 Транспорт TCP (RAW)\
 Безопасность TLS\
+SNI имя домена\
 ALPN http/1.1\
 SSL сертификат Путь к сертификату\
 Установить сертификат панели\
