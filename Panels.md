@@ -33,16 +33,16 @@ clear
 ```
 
 ## Установка панели
-Установите панель с помощью этой команды:
-```sh
-bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
-```
-## Настройка для 3x-ui.
 > После большого обновления 3x-ui до версии 3.1.0 и старше, наблюдаются проблемы с работой мехагнизма Fallback. До того момента как разработчики не вернут нормальную работу функции Fallback, я рекомендую использовать версию панели 2.9.4. Установить ее можно следующей командой:
 ```sh
 VERSION=v2.9.4 && bash <(curl -Ls "https://raw.githubusercontent.com/mhsanaei/3x-ui/$VERSION/install.sh") $VERSION
 ```
 
+Эта команда устанавливает последнюю версию панели 3x-ui:
+```sh
+bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+```
+## Настройка для 3x-ui.
 В первую очередь стоит подключить домен к панели и получить TLS сертификат. Для этого через меню x-ui выбираем соответствующие пункты (SSL Certificate Management или Cloudflare SSL Certificate). Чтобы избежать проблем с обновлением сертификатов, рекомендую подключать через Cloudflare.
 
 Далее создаем инбаунд со следующими настройками:\
