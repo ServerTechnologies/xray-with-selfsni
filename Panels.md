@@ -45,7 +45,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.
 ## Настройка для 3x-ui.
 В первую очередь стоит подключить домен к панели и получить TLS сертификат. Для этого через меню x-ui выбираем соответствующие пункты (SSL Certificate Management или Cloudflare SSL Certificate). Чтобы избежать проблем с обновлением сертификатов, рекомендую подключать через Cloudflare.
 
-Далее создаем инбаунд со следующими настройками:\
+Далее создаем инбаунд со следующими настройками в вебе:\
 Протокол vless\
 Порт 443\
 Транспорт TCP (RAW)\
@@ -58,7 +58,19 @@ SSL сертификат Путь к сертификату\
 \
 В Fallbacks, в поле Dest, указываем 8080\
 \
-Жмем создать
+Жмем создать.
+
+Так же можно попробовать в терминале вместо веба:
+
+Создаем инбаунт, получаем сертификаты если не получены и настройка нгинс с скачиванием главной странички
+``` 
+curl -o /root/vless-tls.sh https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/root/vless-tls.sh && chmod +x /root/vless-tls.sh && ls
+```
+потом запустить 
+```
+./vless-tls.sh vash-domen
+```
+где последнее ваш домен(если скриптом то нгинх автоматом установит и настроит все что ниже)
 
 ### Установка Nginx, создание сайта
 
@@ -93,6 +105,13 @@ EOF
 mv /var/www/html/index.nginx-debian.html /var/www/html/index.html
 systemctl restart nginx
 ```
+
+Можете поставить главной страницей шаблон предложенный мною установка одной командой
+```
+sudo bash -c 'if command -v wget &> /dev/null; then echo "Используется: wget" && wget -O /var/www/html/index.html https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/var/www/html/index.html && echo "Файл успешно скачан в /var/www/html/index.html"; elif command -v curl &> /dev/null; then echo "Используется: curl" && curl -o /var/www/html/index.html https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/var/www/html/index.html && echo "Файл успешно скачан в /var/www/html/index.html"; else echo "Ошибка: ни wget, ни curl не установлены"; exit 1; fi'
+
+```
+
 Готово.
 
 
@@ -237,6 +256,11 @@ unzip <имя архива.zip>
 cp -r <имя папки>/* /var/www/html/index.html
 ```
 
+Можете поставить главной страницей шаблон предложенный мною установка одной командой
+```
+sudo bash -c 'if command -v wget &> /dev/null; then echo "Используется: wget" && wget -O /var/www/html/index.html https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/var/www/html/index.html && echo "Файл успешно скачан в /var/www/html/index.html"; elif command -v curl &> /dev/null; then echo "Используется: curl" && curl -o /var/www/html/index.html https://raw.githubusercontent.com/pegakmop/xray-with-selfsni/refs/heads/main/var/www/html/index.html && echo "Файл успешно скачан в /var/www/html/index.html"; else echo "Ошибка: ни wget, ни curl не установлены"; exit 1; fi'
+
+```
 
 
 

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка IP адресов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .ip-section {
+        margin-bottom: 25px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+    }
+
+    .ip-label {
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 10px;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .ip-value {
+        font-size: 20px;
+        color: #333;
+        font-family: 'Courier New', monospace;
+        word-break: break-all;
+        padding: 10px;
+        background: white;
+        border-radius: 5px;
+    }
+
+    .loading {
+        color: #999;
+        font-style: italic;
+    }
+
+    .error {
+        color: #e74c3c;
+    }
+
+    .success {
+        color: #27ae60;
+    }
+
+    .info-box {
+        background: #e8f4f8;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+        border-left: 4px solid #3498db;
+    }
+
+    .info-box p {
+        color: #555;
+        line-height: 1.6;
+        font-size: 14px;
+    }
+
+    .refresh-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .refresh-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .refresh-btn:active {
+        transform: translateY(0);
+    }
+
+    .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+
+    .status-active {
+        background: #27ae60;
+        box-shadow: 0 0 8px #27ae60;
+    }
+
+    .status-inactive {
+        background: #e74c3c;
+    }
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Проверка IP адресов</h1>
+
+    <div class="ip-section">
+        <div class="ip-label">
+            <span class="status-indicator" id="ipv4-status"></span>
+            IPv4 адрес
+        </div>
+        <div class="ip-value" id="ipv4-address">
+            <span class="loading">Загрузка...</span>
+        </div>
+    </div>
+
+    <div class="ip-section">
+        <div class="ip-label">
+            <span class="status-indicator" id="ipv6-status"></span>
+            IPv6 адрес
+        </div>
+        <div class="ip-value" id="ipv6-address">
+            <span class="loading">Загрузка...</span>
+        </div>
+    </div>
+
+    <button class="refresh-btn" onclick="refreshIP()">🔄 Обновить</button>
+
+    <div class="info-box">
+        <p><strong>ℹ️ Информация:</strong></p>
+        <p>IPv4 - это 32-битный адрес (например: 192.168.1.1)</p>
+        <p>IPv6 - это 128-битный адрес (например: 2001:0db8:85a3::8a2e:0370:7334)</p>
+    </div>
+
+
+</div>
+
+<script>
+    // Функция для получения IPv4
+    async function getIPv4() {
+        const ipv4Element = document.getElementById('ipv4-address');
+        const ipv4Status = document.getElementById('ipv4-status');
+        
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            
+            if (data.ip) {
+                ipv4Element.innerHTML = `<span class="success">${data.ip}</span>`;
+                ipv4Status.className = 'status-indicator status-active';
+            } else {
+                throw new Error('No IP returned');
+            }
+        } catch (error) {
+            ipv4Element.innerHTML = '<span class="error">Не удалось определить IPv4</span>';
+            ipv4Status.className = 'status-indicator status-inactive';
+            console.error('IPv4 Error:', error);
+        }
+    }
+
+    // Функция для получения IPv6
+    async function getIPv6() {
+        const ipv6Element = document.getElementById('ipv6-address');
+        const ipv6Status = document.getElementById('ipv6-status');
+        
+        try {
+            const response = await fetch('https://api64.ipify.org?format=json');
+            const data = await response.json();
+            
+            if (data.ip && data.ip.includes(':')) {
+                ipv6Element.innerHTML = `<span class="success">${data.ip}</span>`;
+                ipv6Status.className = 'status-indicator status-active';
+            } else if (data.ip) {
+                // Если вернулся IPv4 вместо IPv6
+                ipv6Element.innerHTML = '<span class="error">IPv6 недоступен (только IPv4)</span>';
+                ipv6Status.className = 'status-indicator status-inactive';
+            } else {
+                throw new Error('No IP returned');
+            }
+        } catch (error) {
+            ipv6Element.innerHTML = '<span class="error">Не удалось определить IPv6</span>';
+            ipv6Status.className = 'status-indicator status-inactive';
+            console.error('IPv6 Error:', error);
+        }
+    }
+
+    // Функция обновления
+    function refreshIP() {
+        document.getElementById('ipv4-address').innerHTML = '<span class="loading">Загрузка...</span>';
+        document.getElementById('ipv6-address').innerHTML = '<span class="loading">Загрузка...</span>';
+        document.getElementById('ipv4-status').className = 'status-indicator';
+        document.getElementById('ipv6-status').className = 'status-indicator';
+        
+        getIPv4();
+        getIPv6();
+    }
+
+    // Загрузка при старте страницы
+    window.addEventListener('DOMContentLoaded', () => {
+        getIPv4();
+        getIPv6();
+    });
+</script>
+
+</body>
+</html>
